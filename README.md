@@ -20,8 +20,8 @@ Things to do:
 * When stopped or done, discard dupicates?
 * Allow searching several places (including network drives)
 * Copy one copy of duplicate file to a given directory, erase others. 
-..* Give a final location
-..* How to choose name of file? 
-....* Maybe by type and/or modify date
+  * Give a final location
+  * How to choose name of file? 
+    * Maybe by type and/or modify date
 * UI to show files (Icons?) 
-..* What about other types, like text or excel/word/pdf?
+  * What about other types, like text or excel/word/pdf?
