@@ -1,0 +1,2 @@
+# DupeFerret
+Find duplicate files
