@@ -23,5 +23,6 @@ Things to do:
   * Give a final location
   * How to choose name of file? 
     * Maybe by type and/or modify date
+    * Extract date from EXIF data or use file modified date?
 * UI to show files (Icons?) 
   * What about other types, like text or excel/word/pdf?
