@@ -1,0 +1,17 @@
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/obj/Debug/netcoreapp2.1/dupeferret.business.tests.csprojAssemblyReference.cache
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/obj/Debug/netcoreapp2.1/dupeferret.business.tests.csproj.CoreCompileInputs.cache
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/obj/Debug/netcoreapp2.1/dupeferret.business.tests.AssemblyInfoInputs.cache
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/obj/Debug/netcoreapp2.1/dupeferret.business.tests.AssemblyInfo.cs
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/bin/Debug/netcoreapp2.1/xunit.runner.visualstudio.dotnetcore.testadapter.dll
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/bin/Debug/netcoreapp2.1/xunit.runner.reporters.netcoreapp10.dll
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/bin/Debug/netcoreapp2.1/xunit.runner.utility.netcoreapp10.dll
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/bin/Debug/netcoreapp2.1/dupeferret.business.tests.deps.json
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/bin/Debug/netcoreapp2.1/dupeferret.business.tests.runtimeconfig.json
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/bin/Debug/netcoreapp2.1/dupeferret.business.tests.runtimeconfig.dev.json
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/bin/Debug/netcoreapp2.1/dupeferret.business.tests.dll
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/bin/Debug/netcoreapp2.1/dupeferret.business.tests.pdb
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/bin/Debug/netcoreapp2.1/dupeferret.business.dll
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/bin/Debug/netcoreapp2.1/dupeferret.business.pdb
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/obj/Debug/netcoreapp2.1/dupeferret.business.tests.csproj.CopyComplete
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/obj/Debug/netcoreapp2.1/dupeferret.business.tests.dll
+/home/bflanders/dev/DupeFerret/dupeferret.business.tests/obj/Debug/netcoreapp2.1/dupeferret.business.tests.pdb
