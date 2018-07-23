@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Xunit;
 using dupeferret.business;
 
@@ -7,16 +8,18 @@ namespace dupeferret.business.tests
     public class TraverseTests
     {
         public readonly Traverse _traverse;
+        public readonly string _testDataDirectory = Directory.GetCurrentDirectory();
 
         public TraverseTests()
         {
             _traverse = new Traverse();
+            
         }
 
         [Fact]
-        public void GetValue()
+        public void SetCurrentDirectory()
         {
-            Assert.Equal("TestValue", _traverse.GetValue());
+            Console.WriteLine(_testDataDirectory);
         }
     }
 }

@@ -1,9 +1,0 @@
-/home/bflanders/dev/DupeFerret/dupeferret.business/bin/Debug/netstandard2.0/dupeferret.business.deps.json
-/home/bflanders/dev/DupeFerret/dupeferret.business/bin/Debug/netstandard2.0/dupeferret.business.dll
-/home/bflanders/dev/DupeFerret/dupeferret.business/bin/Debug/netstandard2.0/dupeferret.business.pdb
-/home/bflanders/dev/DupeFerret/dupeferret.business/obj/Debug/netstandard2.0/dupeferret.business.csprojAssemblyReference.cache
-/home/bflanders/dev/DupeFerret/dupeferret.business/obj/Debug/netstandard2.0/dupeferret.business.csproj.CoreCompileInputs.cache
-/home/bflanders/dev/DupeFerret/dupeferret.business/obj/Debug/netstandard2.0/dupeferret.business.AssemblyInfoInputs.cache
-/home/bflanders/dev/DupeFerret/dupeferret.business/obj/Debug/netstandard2.0/dupeferret.business.AssemblyInfo.cs
-/home/bflanders/dev/DupeFerret/dupeferret.business/obj/Debug/netstandard2.0/dupeferret.business.dll
-/home/bflanders/dev/DupeFerret/dupeferret.business/obj/Debug/netstandard2.0/dupeferret.business.pdb
