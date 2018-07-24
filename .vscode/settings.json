@@ -1,3 +1,4 @@
 {
-    "dotnet-test-explorer.testProjectPath": "dupeferret.business.tests"
+    "dotnet-test-explorer.testProjectPath": "dupeferret.business.tests",
+    "git.ignoreLimitWarning": true
 }
