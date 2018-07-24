@@ -25,5 +25,4 @@ msbuild.log
 msbuild.err
 msbuild.wrn
 
-#others
-*.cache
+
