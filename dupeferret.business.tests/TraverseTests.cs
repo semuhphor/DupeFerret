@@ -8,30 +8,37 @@ namespace dupeferret.business.tests
     public class TraverseTests
     {
         public readonly Traverse _traverse;
-
-        public TraverseTests() => _traverse = new Traverse();
+        private readonly string _testDatDirectory;
 
         private string TrimOneDirectory(string path)
         {
             return Path.GetFullPath(path + Path.DirectorySeparatorChar + "..");
         }
-        private string TestDataDirectory
+
+        private string DetermineTestDataDirectory()
         {
-            get
+            var codeBaseUrl = new Uri(typeof(TraverseTests).Assembly.CodeBase);
+            var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath); 
+            var path = Path.GetDirectoryName(codeBasePath);
+            while (!path.EndsWith(Path.DirectorySeparatorChar + "bin"))
             {
-                var codeBaseUrl = new Uri(typeof(TraverseTests).Assembly.CodeBase);
-                var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath); 
-                var path = Path.GetDirectoryName(codeBasePath);
-                while (!path.EndsWith(Path.DirectorySeparatorChar + "bin"))
-                {
-                    path = TrimOneDirectory(path);
-                }
-                path = TrimOneDirectory(path) + Path.DirectorySeparatorChar + "TestData";
-                return path;
+                path = TrimOneDirectory(path);
             }
+            path = TrimOneDirectory(path) + Path.DirectorySeparatorChar + "TestData";
+            return path;
         }
 
+        public TraverseTests()
+        {
+            _testDatDirectory = DetermineTestDataDirectory();
+            _traverse = new Traverse(_testDatDirectory);
+        }
+
+
         [Fact]
-        void SetCurrentDirectory() => Console.WriteLine(TestDataDirectory);
+        public void BaseDirectorySetTest()
+        {
+            Assert.Equal(_traverse.BaseDirectory, DetermineTestDataDirectory());
+        }
     }
 }
