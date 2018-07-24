@@ -31,10 +31,10 @@
         },
         {
             "label": "test",
-            "command": "dotnet",
+            "command": "dotnet test dupeferret.business.tests/dupeferret.business.tests.csproj",
             "type": "shell",
             "group": "test",
-            "args": [
+            "xargs": [
                 "test",
                 "${workspaceFolder}/dupeferret.business.tests/dupeferret.business.tests.csproj"
             ],
@@ -42,7 +42,6 @@
                 "reveal": "silent"
             },
             "problemMatcher": "$msCompile"
-            
         }
     ]
 }
