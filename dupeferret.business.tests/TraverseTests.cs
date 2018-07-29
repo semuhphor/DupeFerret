@@ -7,8 +7,8 @@ namespace dupeferret.business.tests
 {
     public class TraverseTests
     {
-        public readonly Traverse _traverse;
-        private readonly string _testDatDirectory;
+        public Traverse _traverser;
+        private readonly string _testDataDirectory;
 
         private string TrimOneDirectory(string path)
         {
@@ -28,17 +28,34 @@ namespace dupeferret.business.tests
             return path;
         }
 
+        private void ResetTraverse()
+        {
+            _traverser = new Traverse();
+        }
+
         public TraverseTests()
         {
-            _testDatDirectory = DetermineTestDataDirectory();
-            _traverse = new Traverse(_testDatDirectory);
+            _testDataDirectory = DetermineTestDataDirectory();
+            ResetTraverse();    
         }
 
 
         [Fact]
         public void BaseDirectorySetTest()
         {
-            Assert.Equal(_traverse.BaseDirectory, DetermineTestDataDirectory());
+            _traverser.AddBaseDirectory(_testDataDirectory);
+            var baseDirectories = _traverser.GetBaseDirectories();
+            Assert.Single(baseDirectories);
+            Assert.Equal(1, baseDirectories[1].Number);
+            Assert.Equal(DetermineTestDataDirectory(), baseDirectories[1].Directory);
+        }
+
+        [Fact]
+        public void AddingBadDirectoryThrowsExceptionTest()
+        {
+            var _badDirectory = _testDataDirectory + Path.DirectorySeparatorChar + "DoesNoteExistDir";
+            Exception ex = Assert.Throws<DirectoryNotFoundException>(() => _traverser.AddBaseDirectory(_badDirectory));
+            Assert.Equal(string.Format(ErrorMessages.InvalidDirectory, _badDirectory), ex.Message);
         }
     }
 }
