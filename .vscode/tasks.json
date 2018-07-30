@@ -2,7 +2,21 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "build business",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/dupeferret.business/dupeferret.business.csproj"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "build tests",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -12,18 +26,13 @@
             "problemMatcher": "$msCompile",
             "group": {
                 "kind": "build",
-                "isDefault": true
-            }
+                "isDefault": false
+            },
+            "dependsOn": ["build business"]
         },
         {
-            "label": "build",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/dupeferret.business/dupeferret.business.csproj"
-            ],
-            "problemMatcher": "$msCompile",
+            "label": "build all",
+            "dependsOn": ["build business", "build tests"],
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -41,7 +50,8 @@
             "presentation": {
                 "reveal": "silent"
             },
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$msCompile",
+            "dependsOn": ["build tests"]
         }
     ]
 }
