@@ -43,6 +43,7 @@ namespace dupeferret.business.tests
         [Fact]
         public void BaseDirectorySetTest()
         {
+            ResetTraverse();
             _traverser.AddBaseDirectory(_testDataDirectory);
             var baseDirectories = _traverser.GetBaseDirectories();
             Assert.Single(baseDirectories);
@@ -51,11 +52,21 @@ namespace dupeferret.business.tests
         }
 
         [Fact]
+        public void CannotAddSameDirectoryTest()
+        {
+            ResetTraverse();
+            _traverser.AddBaseDirectory(_testDataDirectory);
+            Exception ex = Assert.Throws<Exception>(() => _traverser.AddBaseDirectory(_testDataDirectory));
+            Assert.Equal(ErrorMessages.DuplicateBaseDirectory.Format(_testDataDirectory), ex.Message);
+
+        }
+
+        [Fact]
         public void AddingBadDirectoryThrowsExceptionTest()
         {
             var _badDirectory = _testDataDirectory + Path.DirectorySeparatorChar + "DoesNoteExistDir";
             Exception ex = Assert.Throws<DirectoryNotFoundException>(() => _traverser.AddBaseDirectory(_badDirectory));
-            Assert.Equal(string.Format(ErrorMessages.InvalidDirectory, _badDirectory), ex.Message);
+            Assert.Equal(ErrorMessages.InvalidDirectory.Format(_badDirectory), ex.Message);
         }
     }
 }
