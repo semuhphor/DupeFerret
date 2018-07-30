@@ -28,7 +28,8 @@ namespace dupeferret.business
             {
                 throw new Exception(ErrorMessages.DuplicateBaseDirectory.Format(directory));
             }
-            var newEntry = new BaseDirectoryEntry(_baseDirectories.Count + 1, directory);
+            var info = new DirectoryInfo(directory);
+            var newEntry = new BaseDirectoryEntry(_baseDirectories.Count + 1, info.FullName);
             _baseDirectories.Add(newEntry.Number, newEntry);
         }
 
@@ -48,7 +49,7 @@ namespace dupeferret.business
         {
             foreach (var value in _baseDirectories.Values)
             {
-                if (value.Directory.ToLower() == dir.ToLower())
+                if (value.Directory == dir)
                 {
                     return true; 
                 }
