@@ -3,6 +3,7 @@
 project.lock.json
 .DS_Store
 *.pyc
+*.cache
 **/*.cache
 **/obj/*
 **/bin/*
@@ -27,3 +28,4 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
+dupeferret.business/obj/Debug/netstandard2.0/dupeferret.business.csprojResolveAssemblyReference.cache
