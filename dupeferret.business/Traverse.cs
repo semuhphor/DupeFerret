@@ -5,7 +5,7 @@ using System.IO;
 
 namespace dupeferret.business
 {
-    public class Traverse
+    public class Traverser
     {
         private readonly Dictionary<int, BaseDirectoryEntry> _baseDirectories = new Dictionary<int, BaseDirectoryEntry>();
 
@@ -14,7 +14,7 @@ namespace dupeferret.business
             return _baseDirectories;
         }
 
-        public Traverse()
+        public Traverser()
         {
         }
 

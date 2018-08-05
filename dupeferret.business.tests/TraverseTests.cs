@@ -9,7 +9,7 @@ namespace dupeferret.business.tests
     public class TraverseTests
     {
         private readonly ITestOutputHelper _output;
-        public Traverse _traverser;
+        public Traverser _traverser;
         private readonly string _testDataDirectory;
         private string _path; // for testing more than one directory.
 
@@ -59,7 +59,7 @@ namespace dupeferret.business.tests
         #region ResetTraverse
         private void ResetTraverse()
         {
-            _traverser = new Traverse();
+            _traverser = new Traverser();
         }
         #endregion
 
