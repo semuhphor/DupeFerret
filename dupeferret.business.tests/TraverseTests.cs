@@ -3,6 +3,7 @@ using System.IO;
 using Xunit;
 using Xunit.Abstractions;
 using dupeferret.business;
+using System.Collections.Generic;
 
 namespace dupeferret.business.tests
 {
@@ -56,7 +57,62 @@ namespace dupeferret.business.tests
             Assert.Equal(ErrorMessages.InvalidDirectory.Format(_badDirectory), ex.Message);
         }
 
+        [Fact]
+        public void EnumerateFilesGetsAllEntriesTest()
+        {
+            _traverser.AddBaseDirectory(_testDataDirectory);
+            var fileList = _traverser.GetAllFiles();
+            Assert.Equal(12, fileList.Count);
+            Assert.Equal(8, CountFiles(fileList, "dup"));
+            Assert.Equal(4, CountFiles(fileList, "notdup"));
+        }
+
+        [Fact]
+        public void EnumerateFilesGetsAllEntriesTestSet1()
+        {
+            _traverser.AddBaseDirectory(TestDiretorySet1);
+            var fileList = _traverser.GetAllFiles();
+            Assert.Equal(9, fileList.Count);
+            Assert.Equal(6, CountFiles(fileList, "dup"));
+            Assert.Equal(3, CountFiles(fileList, "notdup"));
+        }
+
+        [Fact]
+        public void EnumerateFilesGetsAllEntriesTestSet2()
+        {
+            _traverser.AddBaseDirectory(TestDiretorySet2);
+            var fileList = _traverser.GetAllFiles();
+            Assert.Equal(3, fileList.Count);
+            Assert.Equal(2, CountFiles(fileList, "dup"));
+            Assert.Equal(1, CountFiles(fileList, "notdup"));
+        }
+
+        [Fact]
+        public void EnumerateFilesGetsAllEntriesTestBothSets()
+        {
+            _traverser.AddBaseDirectory(TestDiretorySet1);
+            _traverser.AddBaseDirectory(TestDiretorySet2);
+            var fileList = _traverser.GetAllFiles();
+            Assert.Equal(12, fileList.Count);
+            Assert.Equal(8, CountFiles(fileList, "dup"));
+            Assert.Equal(4, CountFiles(fileList, "notdup"));
+        }
+
         #region ResetTraverse
+
+        private int CountFiles(List<string> fileList, string startingWith)
+        {
+            int filesThatMatch = 0;
+            foreach(var file in fileList)
+            {
+                if (Path.GetFileName(file).ToLower().StartsWith(startingWith))
+                {
+                    filesThatMatch++;
+                }
+            }
+            return filesThatMatch;
+        }
+
         private void ResetTraverse()
         {
             _traverser = new Traverser();
@@ -82,6 +138,10 @@ namespace dupeferret.business.tests
             path = TrimOneDirectory(path) + Path.DirectorySeparatorChar + "TestData";
             return path;
         }
+
+        private string TestDiretorySet1{ get {return Path.Combine(_testDataDirectory, "Set1");}}
+        private string TestDiretorySet2{ get {return Path.Combine(_testDataDirectory, "Set2");}}
+        
         #endregion
     }
 }
