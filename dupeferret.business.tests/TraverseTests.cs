@@ -96,16 +96,33 @@ namespace dupeferret.business.tests
             Assert.Equal(12, fileList.Count);
             Assert.Equal(8, CountFiles(fileList, "dup"));
             Assert.Equal(4, CountFiles(fileList, "notdup"));
+            VerifyFileEntries(_traverser, fileList);
         }
 
         #region ResetTraverse
 
-        private int CountFiles(List<string> fileList, string startingWith)
+        private void VerifyFileEntries(Traverser traverser, List<FileEntry> fileList)
+        {
+            foreach(var fileEntry in fileList)
+            {
+                var baseDirectory = traverser.GetBaseDirectories()[fileEntry.BaseDirectoryKey].Directory;
+                var fqfn = Path.Combine(baseDirectory, fileEntry.RelativePath);
+                _output.WriteLine(fqfn);
+                var exists = File.Exists(fqfn);
+                if (!exists)
+                {
+                    _output.WriteLine("path: {0}; file:{1}", baseDirectory, fileEntry.RelativePath);
+                }
+                Assert.True(exists);
+            }
+        }
+
+        private int CountFiles(List<FileEntry> fileEntryList, string startingWith)
         {
             int filesThatMatch = 0;
-            foreach(var file in fileList)
+            foreach(var fileEntry in fileEntryList)
             {
-                if (Path.GetFileName(file).ToLower().StartsWith(startingWith))
+                if (Path.GetFileName(fileEntry.RelativePath).ToLower().StartsWith(startingWith))
                 {
                     filesThatMatch++;
                 }

@@ -33,22 +33,35 @@ namespace dupeferret.business
             _baseDirectories.Add(newEntry.Number, newEntry);
         }
 
-        public List<string> GetAllFiles()
+        public List<FileEntry> GetAllFiles()
         {
-            var fileList = new List<string>();
+            var fileList = new List<FileEntry>();
             foreach(var value in _baseDirectories.Values)
             {
-                foreach(var entry in Directory.GetFileSystemEntries(value.Directory, "*", SearchOption.AllDirectories))
+                foreach(var fullyQualifiedFileName in Directory.GetFileSystemEntries(value.Directory, "*", SearchOption.AllDirectories))
                 {
-                    if (!Directory.Exists(entry))
+                    if (!Directory.Exists(fullyQualifiedFileName))
                     {
-                        fileList.Add(entry);
+                        fileList.Add(BuildFileEntry(value, fullyQualifiedFileName));
                     }
                 }
             }
             return fileList;
         }
 
+        private FileEntry BuildFileEntry(BaseDirectoryEntry baseDirectoryEntry, string fullyQualifiedFileName)
+        {
+            if (!fullyQualifiedFileName.StartsWith(baseDirectoryEntry.Directory))
+            {
+                throw new InvalidDataException(ErrorMessages.DirectoryNotInFQFN.Format(baseDirectoryEntry.Directory) + fullyQualifiedFileName);
+            }
+            var fqfn = fullyQualifiedFileName.Substring(baseDirectoryEntry.Directory.Length);
+            if (fqfn.StartsWith(Path.DirectorySeparatorChar.ToString()))
+            {
+                fqfn = fqfn.Substring(1);
+            }
+            return new FileEntry(baseDirectoryEntry.Number, fqfn);
+        }
         private bool DirectoryExists(string dir)
         {
             try
