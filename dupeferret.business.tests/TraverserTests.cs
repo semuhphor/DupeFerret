@@ -65,6 +65,14 @@ namespace dupeferret.business.tests
         }
 
         [Fact]
+        public void NoZeroLengthFiles()
+        {
+            _traverser.AddBaseDirectory(TestDiretorySet1);
+            _traverser.GetAllFiles();
+            Assert.Equal(0, CountFiles("zero"));
+        }
+
+        [Fact]
         public void EnumerateFilesGetsAllEntriesTestSet1()
         {
             _traverser.AddBaseDirectory(TestDiretorySet1);
