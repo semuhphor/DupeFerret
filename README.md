@@ -2,10 +2,12 @@
 Find duplicate files
 
 Consider what constitutes a dupe:
-* size?
-* size and date?
-* name, size and date?
-* name, size, date and md5?
+* size is primary. 
+* md5 of first 512 bites, then whole file?
+* name may play roled, but not required.
+
+Key Contents:
+* base 64 size?
 * maybe size always part of key? If not same size, can't be dupe. hmm.
 
 Things to do:

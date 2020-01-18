@@ -1,22 +1,25 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Collections;
+
 
 namespace dupeferret.business
 {
-    public class Traverser
+    public class Traverser 
     {
         private readonly Dictionary<int, BaseDirectoryEntry> _baseDirectories = new Dictionary<int, BaseDirectoryEntry>();
+        private readonly Dictionary<string, FileEntry> _uniqueFiles = new Dictionary<string, FileEntry>();
+        private readonly Dictionary<long, List<FileEntry>> _filesByLength = new Dictionary<long, List<FileEntry>>();
 
-        public Dictionary<int, BaseDirectoryEntry> GetBaseDirectories()
-        {
-            return _baseDirectories;
-        }
+        public Dictionary<string, FileEntry> UniqueFiles => _uniqueFiles;
 
-        public Traverser()
-        {
-        }
+        public Dictionary<long, List<FileEntry>> FilesByLength => _filesByLength;
+
+        public int Count { get { return UniqueFiles.Values.Count; } }
+
+        public Dictionary<int, BaseDirectoryEntry> BaseDirectories => _baseDirectories;
 
         public void AddBaseDirectory(string directory)
         {
@@ -33,34 +36,45 @@ namespace dupeferret.business
             _baseDirectories.Add(newEntry.Number, newEntry);
         }
 
-        public List<FileEntry> GetAllFiles()
+        public void GetAllFiles()
         {
-            var fileList = new List<FileEntry>();
-            foreach(var value in _baseDirectories.Values)
+            foreach(var baseDirectoryEntry in _baseDirectories.Values)
             {
-                foreach(var fullyQualifiedFileName in Directory.GetFileSystemEntries(value.Directory, "*", SearchOption.AllDirectories))
+                foreach(var fullyQualifiedFileName in Directory.GetFileSystemEntries(baseDirectoryEntry.Directory, "*", SearchOption.AllDirectories))
                 {
-                    if (!Directory.Exists(fullyQualifiedFileName))
+                    bool entryIsNotDirectory = !Directory.Exists(fullyQualifiedFileName);
+                    if (entryIsNotDirectory)
                     {
-                        fileList.Add(BuildFileEntry(value, fullyQualifiedFileName));
+                        AddFileEntries(baseDirectoryEntry, fullyQualifiedFileName);
                     }
                 }
             }
-            return fileList;
+            foreach(var fileEntry in UniqueFiles.Values)
+            {
+                Console.WriteLine(fileEntry.FQFN);
+            }
         }
 
-        private FileEntry BuildFileEntry(BaseDirectoryEntry baseDirectoryEntry, string fullyQualifiedFileName)
+        private void AddFileEntries(BaseDirectoryEntry baseDirectoryEntry, string fullyQualifiedFileName)
         {
-            if (!fullyQualifiedFileName.StartsWith(baseDirectoryEntry.Directory))
+            if (!UniqueFiles.ContainsKey(fullyQualifiedFileName))
             {
-                throw new InvalidDataException(ErrorMessages.DirectoryNotInFQFN.Format(baseDirectoryEntry.Directory) + fullyQualifiedFileName);
+                var fileEntry = new FileEntry(baseDirectoryEntry.Number, fullyQualifiedFileName);
+                FileInfo info = fileEntry.Info;
+                long length = info.Length;
+                if (length == 0L || fileEntry.Info.Name.StartsWith("."))
+                {
+                    return;
+                }
+                UniqueFiles.Add(fullyQualifiedFileName, fileEntry);
+                var lengthList = FilesByLength.ContainsKey(length) ? FilesByLength[length] : null;
+                if (lengthList == null)
+                {
+                    lengthList = new List<FileEntry>();
+                    FilesByLength.Add(length, lengthList);
+                }
+                FilesByLength[length].Add(fileEntry);
             }
-            var fqfn = fullyQualifiedFileName.Substring(baseDirectoryEntry.Directory.Length);
-            if (fqfn.StartsWith(Path.DirectorySeparatorChar.ToString()))
-            {
-                fqfn = fqfn.Substring(1);
-            }
-            return new FileEntry(baseDirectoryEntry.Number, fqfn);
         }
         private bool DirectoryExists(string dir)
         {

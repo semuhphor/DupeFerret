@@ -2,6 +2,43 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/dupeferret.business.tests/dupeferret.business.tests.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/dupeferret.business.tests/dupeferret.business.tests.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "${workspaceFolder}/dupeferret.business.tests/dupeferret.business.tests.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "build business",
             "command": "dotnet",
             "type": "process",
@@ -28,11 +65,16 @@
                 "kind": "build",
                 "isDefault": false
             },
-            "dependsOn": ["build business"]
+            "dependsOn": [
+                "build business"
+            ]
         },
         {
             "label": "build all",
-            "dependsOn": ["build business", "build tests"],
+            "dependsOn": [
+                "build business",
+                "build tests"
+            ],
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -51,7 +93,9 @@
                 "reveal": "silent"
             },
             "problemMatcher": "$msCompile",
-            "dependsOn": ["build tests"]
+            "dependsOn": [
+                "build tests"
+            ]
         }
     ]
 }

@@ -4,12 +4,13 @@ namespace dupeferret.business {
     public class FileEntry {
 
         public int BaseDirectoryKey { get; private set; }
-        public string RelativePath { get; private set; }
-        public DirectoryInfo DirInfo { get; set; }
+        public FileInfo Info { get; set; }
+        public string FQFN { get; set; }
 
-        public FileEntry (int baseDirectoryKey, string relativePath) {
+        public FileEntry(int baseDirectoryKey, string fqfn) {
             this.BaseDirectoryKey = baseDirectoryKey;
-            this.RelativePath = relativePath;
+            this.FQFN = fqfn;
+            this.Info = new FileInfo(fqfn); 
         }
     }
 }
