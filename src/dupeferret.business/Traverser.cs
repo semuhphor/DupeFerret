@@ -79,12 +79,16 @@ namespace dupeferret.business
 
             foreach(var entry in filesWithTheSameLength)
             {
-                var hash = entry.FirstHash();
-                if (!dupeSets.ContainsKey(hash))
+                try
                 {
-                    dupeSets.Add(hash, new List<FileEntry>());
+                    var hash = entry.FirstHash();
+                    if (!dupeSets.ContainsKey(hash))
+                    {
+                        dupeSets.Add(hash, new List<FileEntry>());
+                    }
+                    dupeSets[hash].Add(entry);
                 }
-                dupeSets[hash].Add(entry);
+                catch {}
             }
             foreach(var key in dupeSets.Keys)
             {
@@ -99,7 +103,10 @@ namespace dupeferret.business
         private List<string> BuildFileList(DirectoryInfo dirInfo, List<string> fileList = null)
         {
             fileList ??= new List<string>();
-            Console.Write("{0}                                                             \r", dirInfo.FullName);
+            if (dirInfo.Name.StartsWith("."))
+            {
+                return fileList;
+            }
             try
             {
                 foreach(var file in dirInfo.GetFiles("*", SearchOption.TopDirectoryOnly))
