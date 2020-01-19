@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\dupeferret.business\dupeferret.business.csproj" />
+    <ProjectReference Include="..\..\src\dupeferret.business\dupeferret.business.csproj" />
   </ItemGroup>
 
 </Project>

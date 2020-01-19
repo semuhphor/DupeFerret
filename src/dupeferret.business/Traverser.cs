@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Net.NetworkInformation;
+using System.Reflection.PortableExecutable;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +18,6 @@ namespace dupeferret.business
         public Dictionary<string, FileEntry> UniqueFiles => _uniqueFiles;
 
         public Dictionary<long, List<FileEntry>> FilesByLength => _filesByLength;
-
         public int Count { get { return UniqueFiles.Values.Count; } }
 
         public Dictionary<int, BaseDirectoryEntry> BaseDirectories => _baseDirectories;
@@ -40,19 +41,83 @@ namespace dupeferret.business
         {
             foreach(var baseDirectoryEntry in _baseDirectories.Values)
             {
-                foreach(var fullyQualifiedFileName in Directory.GetFileSystemEntries(baseDirectoryEntry.Directory, "*", SearchOption.AllDirectories))
+                string dir = baseDirectoryEntry.Directory;
+                Console.WriteLine("Processing {0}", dir);
+                try
                 {
-                    bool entryIsNotDirectory = !Directory.Exists(fullyQualifiedFileName);
-                    if (entryIsNotDirectory)
+                    var dirInfo = new DirectoryInfo(dir);
+                    foreach(var fullyQualifiedFileName in BuildFileList(dirInfo))
                     {
-                        AddFileEntries(baseDirectoryEntry, fullyQualifiedFileName);
+                        bool entryIsNotDirectory = !Directory.Exists(fullyQualifiedFileName);
+                        if (entryIsNotDirectory)
+                        {
+                            AddFileEntries(baseDirectoryEntry, fullyQualifiedFileName);
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
             }
-            foreach(var fileEntry in UniqueFiles.Values)
+        }
+
+        public void CleanSingles()
+        {
+            foreach(var key in FilesByLength.Keys)
             {
-                Console.WriteLine(fileEntry.FQFN);
+                if (FilesByLength[key].Count < 2)
+                {
+                    FilesByLength.Remove(key);
+                }
             }
+        }
+
+        public Dictionary<string, List<FileEntry>> FindPossibleDupes(List<FileEntry> filesWithTheSameLength)
+        {
+            var dupeSets = new Dictionary<string, List<FileEntry>>();
+
+            foreach(var entry in filesWithTheSameLength)
+            {
+                var hash = entry.FirstHash();
+                if (!dupeSets.ContainsKey(hash))
+                {
+                    dupeSets.Add(hash, new List<FileEntry>());
+                }
+                dupeSets[hash].Add(entry);
+            }
+            foreach(var key in dupeSets.Keys)
+            {
+                if (dupeSets[key].Count < 2)
+                {
+                    dupeSets.Remove(key);
+                }
+            }
+            return dupeSets;
+        }
+
+        private List<string> BuildFileList(DirectoryInfo dirInfo, List<string> fileList = null)
+        {
+            fileList ??= new List<string>();
+            Console.Write("{0}                                                             \r", dirInfo.FullName);
+            try
+            {
+                foreach(var file in dirInfo.GetFiles("*", SearchOption.TopDirectoryOnly))
+                {
+                    string fqfn = Path.Combine(file.DirectoryName, file.Name);
+                    fileList.Add(fqfn);
+                }
+            }
+            catch {}
+            try
+            {
+                foreach(var dir in dirInfo.GetDirectories("*", SearchOption.TopDirectoryOnly))
+                {
+                    BuildFileList(dir, fileList);
+                }
+            }
+            catch {}
+            return fileList;
         }
 
         private void AddFileEntries(BaseDirectoryEntry baseDirectoryEntry, string fullyQualifiedFileName)

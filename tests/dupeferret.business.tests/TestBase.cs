@@ -6,8 +6,10 @@ namespace dupeferret.business.tests
     public abstract class TestBase
     {
         internal const string TestFileName = "Dup_1_A";
+        internal const string DupeFileName = "Dup_1_D";
 
         internal string FQTestFileName;
+        internal string FQDupFileName;
 
         internal FileInfo TestFileInfo;
 
@@ -18,7 +20,8 @@ namespace dupeferret.business.tests
         public TestBase()
         {
             TestDataDirectory = DetermineTestDataDirectory();
-            FQTestFileName = Path.Combine(TestDataDirectory, TestFileName);
+            FQTestFileName = Path.Combine(TestDiretorySet1, TestFileName);
+            FQDupFileName = Path.Combine(TestDiretorySet2, DupeFileName);
             TestFileInfo = new FileInfo(FQTestFileName);
         }
 
