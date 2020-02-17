@@ -1,10 +1,6 @@
-﻿using System.Net.NetworkInformation;
-using System.Reflection.PortableExecutable;
-using System.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Collections;
 
 
 namespace dupeferret.business
@@ -73,15 +69,15 @@ namespace dupeferret.business
             }
         }
 
-        public Dictionary<string, List<FileEntry>> FindPossibleDupes(List<FileEntry> filesWithTheSameLength)
+        public Dictionary<string, List<FileEntry>> FindDupes(List<FileEntry> similarFiles, bool firstHash)
         {
             var dupeSets = new Dictionary<string, List<FileEntry>>();
 
-            foreach(var entry in filesWithTheSameLength)
+            foreach(var entry in similar
             {
                 try
                 {
-                    var hash = entry.FirstHash();
+                    var hash = firstHash ?  entry.FirstHash() : entry.FullHash();
                     if (!dupeSets.ContainsKey(hash))
                     {
                         dupeSets.Add(hash, new List<FileEntry>());
@@ -134,7 +130,7 @@ namespace dupeferret.business
                 var fileEntry = new FileEntry(baseDirectoryEntry.Number, fullyQualifiedFileName);
                 FileInfo info = fileEntry.Info;
                 long length = info.Length;
-                if (length == 0L || fileEntry.Info.Name.StartsWith("."))
+                if (length > int.MaxValue || length == 0L || fileEntry.Info.Name.StartsWith("."))
                 {
                     return;
                 }
