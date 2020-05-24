@@ -16,8 +16,11 @@ namespace dupeferret
                 _traverser.CleanSingles();
                 foreach(var sameLengthSet in _traverser.FilesByLength.Values)
                 {
-                    var dupeSets = _traverser.FindPossibleDupes(sameLengthSet);
-
+                    foreach(var key512 = _traverser.FindDupes(sameLengthSet, true).Keys)
+                    {
+                        foreach(var fullMatchSet =)
+                    }
+                    dupeSets = _traverser.FindDupes(dupeSets, false);
                     foreach(var key in dupeSets.Keys)
                     {
                         Console.WriteLine("");

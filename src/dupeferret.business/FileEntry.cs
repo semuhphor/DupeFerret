@@ -5,11 +5,13 @@ using System.Text;
 namespace dupeferret.business {
     public class FileEntry {
 
+        public enum HashType { HashFirst512, HasFullFile }
         public int BaseDirectoryKey { get; private set; }
         public FileInfo Info { get; set; }
         public string FQFN { get; set; }
 
         public string First512Hash{ get; set;}
+        public string FullFileHash{ get; set; }
 
         public FileEntry(int baseDirectoryKey, string fqfn) {
             this.BaseDirectoryKey = baseDirectoryKey;
@@ -19,15 +21,30 @@ namespace dupeferret.business {
 
         public string FirstHash()
         {
-            int readLength = Info.Length < 512L ? (int) Info.Length : 512;
+            First512Hash =  HashIt(HashType.HashFirst512);
+            return First512Hash;
+        }
+
+        public string FullHash()
+        {
+            FullFileHash =  HashIt(HashType.HasFullFile);
+            return FullFileHash;
+        }
+
+        private string HashIt(HashType typeOfHash)
+        {
+            long readLength = Info.Length;
+            if (typeOfHash == HashType.HashFirst512 && readLength > 512L)
+            {
+                readLength = 512L;
+            }
             byte[] buffer = new byte[readLength];
             using (var fi = File.Open(FQFN, FileMode.Open))
             {
-                fi.Read(buffer, 0, readLength);
+                fi.Read(buffer, 0, (int) readLength);
                 fi.Close();
             }
-            First512Hash = GetHash(SHA512.Create(), buffer);
-            return First512Hash;
+            return GetHash(SHA512.Create(), buffer);
         }
 
         private static string GetHash(HashAlgorithm hashAlgorithm, byte[] data)

@@ -109,9 +109,9 @@ namespace dupeferret.business.tests
             _traverser.AddBaseDirectory(TestDataDirectory);
             _traverser.GetAllFiles();
             Assert.Equal(8, _traverser.FilesByLength[10L].Count); 
-            Assert.Equal(1, _traverser.FilesByLength[17L].Count);
+            Assert.Single(_traverser.FilesByLength[17L]);
             Assert.Equal(2, _traverser.FilesByLength[32L].Count);
-            Assert.Equal(1, _traverser.FilesByLength[29L].Count);
+            Assert.Single(_traverser.FilesByLength[29L]);
         }
 
         [Fact]
@@ -134,7 +134,7 @@ namespace dupeferret.business.tests
             _traverser.CleanSingles();
             foreach(var fileSet in _traverser.FilesByLength.Values)
             {
-                var dupeSets = _traverser.FindPossibleDupes(fileSet);
+                var dupeSets = _traverser.FindDupes(fileSet, true);
                 foreach(var key in dupeSets.Keys)
                 {
                     Console.WriteLine("");

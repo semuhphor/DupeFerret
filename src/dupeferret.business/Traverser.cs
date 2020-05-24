@@ -73,7 +73,7 @@ namespace dupeferret.business
         {
             var dupeSets = new Dictionary<string, List<FileEntry>>();
 
-            foreach(var entry in similar
+            foreach(var entry in similarFiles)
             {
                 try
                 {
