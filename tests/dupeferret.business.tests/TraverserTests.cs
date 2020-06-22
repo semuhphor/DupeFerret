@@ -104,45 +104,15 @@ namespace dupeferret.business.tests
         }
 
         [Fact]
-        public void CheckNumberOfFilesByLengthTest()
-        {
-            _traverser.AddBaseDirectory(TestDataDirectory);
-            _traverser.GetAllFiles();
-            Assert.Equal(8, _traverser.FilesByLength[10L].Count); 
-            Assert.Single(_traverser.FilesByLength[17L]);
-            Assert.Equal(2, _traverser.FilesByLength[32L].Count);
-            Assert.Single(_traverser.FilesByLength[29L]);
-        }
-
-        [Fact]
-        public void CleanSinglesTest()
-        {
-            _traverser.AddBaseDirectory(TestDataDirectory);
-            _traverser.GetAllFiles();
-            _traverser.CleanSingles();
-            Assert.Equal(8, _traverser.FilesByLength[10L].Count); 
-            Assert.Equal(2, _traverser.FilesByLength[32L].Count);
-            Assert.False(_traverser.FilesByLength.ContainsKey(29L));
-            Assert.False(_traverser.FilesByLength.ContainsKey(17L));
-        }
-
-        [Fact]
         public void FindPossibleDupesTest()
         {
             _traverser.AddBaseDirectory(TestDataDirectory);
-            _traverser.GetAllFiles();
-            _traverser.CleanSingles();
-            foreach(var fileSet in _traverser.FilesByLength.Values)
+            var list = _traverser.GetDupeSets();
+            foreach(var dupeSet in list)
             {
-                var dupeSets = _traverser.FindDupes(fileSet, true);
-                foreach(var key in dupeSets.Keys)
-                {
-                    Console.WriteLine("");
-                    Console.WriteLine("Key is {0}", key);
-                    Console.WriteLine("-----------------------------------", key);
-                    dupeSets[key].ForEach(entry => { Console.WriteLine($"{entry.First512Hash}: {entry.FQFN}"); });
-                    Console.WriteLine("");
-                }
+                Console.WriteLine("--------");
+                dupeSet.ForEach(entry => { Console.WriteLine($"{entry.FQFN}"); });
+                Console.WriteLine("");
             }
         }
 

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using System.Reflection.Metadata.Ecma335;
+using System.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -15,9 +17,9 @@ namespace dupeferret.business
 
         public Dictionary<long, List<FileEntry>> FilesByLength => _filesByLength;
         public int Count { get { return UniqueFiles.Values.Count; } }
-
         public Dictionary<int, BaseDirectoryEntry> BaseDirectories => _baseDirectories;
 
+        public enum HashType{ Small, Full }
         public void AddBaseDirectory(string directory)
         {
             if (!DirectoryExists(directory))
@@ -33,7 +35,28 @@ namespace dupeferret.business
             _baseDirectories.Add(newEntry.Number, newEntry);
         }
 
-        public void GetAllFiles()
+        public List<List<FileEntry>> GetDupeSets()
+        {
+            var sameLengthList = GetAllFiles();
+            var sameSmallHashList = GetDupesByHash(sameLengthList, HashType.Small);
+            var sameFullHashList = GetDupesByHash(sameSmallHashList, HashType.Full);
+
+            return sameFullHashList;
+        }
+
+        public List<List<FileEntry>> GetDupesByHash(List<List<FileEntry>> similarFiles, HashType hashType)
+        {
+            var returnList = new List<List<FileEntry>>();
+
+            foreach(var list in similarFiles)
+            {
+                var sameByHash = FindDupes(list, hashType);
+                returnList.AddRange(sameByHash);
+            }
+            return returnList;
+        }
+
+        public List<List<FileEntry>> GetAllFiles()
         {
             foreach(var baseDirectoryEntry in _baseDirectories.Values)
             {
@@ -56,20 +79,25 @@ namespace dupeferret.business
                     Console.WriteLine(ex);
                 }
             }
+            return CleanSingles(FilesByLength);
         }
 
-        public void CleanSingles()
+        public List<List<FileEntry>> CleanSingles<T>(IDictionary<T, List<FileEntry>> dict)
         {
-            foreach(var key in FilesByLength.Keys)
+            var returnList = new List<List<FileEntry>>();
+
+            foreach(var key in dict.Keys)
             {
-                if (FilesByLength[key].Count < 2)
+                if (dict[key].Count > 1)
                 {
-                    FilesByLength.Remove(key);
+                    returnList.Add(dict[key]);
                 }
+                dict.Remove(key);
             }
+            return returnList;
         }
 
-        public Dictionary<string, List<FileEntry>> FindDupes(List<FileEntry> similarFiles, bool firstHash)
+        public List<List<FileEntry>> FindDupes(List<FileEntry> similarFiles, HashType hashType)
         {
             var dupeSets = new Dictionary<string, List<FileEntry>>();
 
@@ -77,7 +105,7 @@ namespace dupeferret.business
             {
                 try
                 {
-                    var hash = firstHash ?  entry.FirstHash() : entry.FullHash();
+                    var hash = (hashType == HashType.Small) ?  entry.FirstHash() : entry.FullHash();
                     if (!dupeSets.ContainsKey(hash))
                     {
                         dupeSets.Add(hash, new List<FileEntry>());
@@ -86,14 +114,7 @@ namespace dupeferret.business
                 }
                 catch {}
             }
-            foreach(var key in dupeSets.Keys)
-            {
-                if (dupeSets[key].Count < 2)
-                {
-                    dupeSets.Remove(key);
-                }
-            }
-            return dupeSets;
+            return CleanSingles(dupeSets);
         }
 
         private List<string> BuildFileList(DirectoryInfo dirInfo, List<string> fileList = null)

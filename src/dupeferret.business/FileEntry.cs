@@ -39,12 +39,12 @@ namespace dupeferret.business {
                 readLength = 512L;
             }
             byte[] buffer = new byte[readLength];
-            using (var fi = File.Open(FQFN, FileMode.Open))
+            using (var fi = File.Open(FQFN, FileMode.Open,FileAccess.Read, FileShare.Read))
             {
                 fi.Read(buffer, 0, (int) readLength);
                 fi.Close();
             }
-            return GetHash(SHA512.Create(), buffer);
+            return GetHash(new SHA512Managed(), buffer);
         }
 
         private static string GetHash(HashAlgorithm hashAlgorithm, byte[] data)
@@ -52,16 +52,17 @@ namespace dupeferret.business {
             // Create a new Stringbuilder to collect the bytes
             // and create a string.
             var sBuilder = new StringBuilder();
+            var hash = hashAlgorithm.ComputeHash(data);
 
             // Loop through each byte of the hashed data 
             // and format each one as a hexadecimal string.
-            for (int i = 0; i < data.Length; i++)
+            for (int i = 0; i < hash.Length; i++)
             {
-                sBuilder.Append(data[i].ToString("x2"));
+                sBuilder.Append(hash[i].ToString("x2"));
             }
 
             // Return the hexadecimal string.
             return sBuilder.ToString();
-    }
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace dupeferret.business.tests
         {
             var entry = new FileEntry(1, base.FQTestFileName);
             var hash = entry.FirstHash();
-            Assert.Equal("4475706c696361746531", hash);
+            Assert.Equal("ffaf844d445ca6193a2a1bf5ae96c372f2a04d09c1b46493adfec2309d8e8e2233e6113a8306f28e7dc236781b73fad56f33a49bbb2fcb43af5f686cfaade102", hash);
         } 
 
         [Fact]
