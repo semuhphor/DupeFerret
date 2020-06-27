@@ -1,13 +1,32 @@
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace dupeferret.business {
+    public class FileInfoHandler
+    {
+        private FileInfo _fileInfo;
+
+        public long Length { get; private set; }
+        public string Name { get; private set; }
+        public DateTime CreationTime { get; private set; }
+        public DateTime LastWriteTime { get; private set; }
+        public FileInfoHandler(string fqfn)
+        {
+            _fileInfo = new FileInfo(fqfn);
+            Length = _fileInfo.Length;
+            Name = _fileInfo.Name;
+            CreationTime = _fileInfo.CreationTime;
+            LastWriteTime = _fileInfo.LastWriteTime;
+        }
+    }
+
     public class FileEntry {
 
         public enum HashType { HashFirst512, HasFullFile }
         public int BaseDirectoryKey { get; private set; }
-        public FileInfo Info { get; set; }
+        public FileInfoHandler Info { get; set; }
         public string FQFN { get; set; }
 
         public string First512Hash{ get; set;}
@@ -16,7 +35,7 @@ namespace dupeferret.business {
         public FileEntry(int baseDirectoryKey, string fqfn) {
             this.BaseDirectoryKey = baseDirectoryKey;
             this.FQFN = fqfn;
-            this.Info = new FileInfo(fqfn); 
+            this.Info = new FileInfoHandler(fqfn); 
         }
 
         public string FirstHash()

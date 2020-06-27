@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using System;
+using System.Collections.Generic;
 using dupeferret.business;
 
 namespace dupeferret
@@ -16,12 +17,10 @@ namespace dupeferret
             }
             var dupeSets = _traverser.GetDupeSets();
 
-            foreach(var dupeSet in dupeSets)
-            {
-                Console.WriteLine("--------");
-                dupeSet.ForEach(entry => { Console.WriteLine($"{entry.FQFN}"); });
-                Console.WriteLine("");
-            }
+            // foreach(var dupeSet in dupeSets)
+            // {
+            //     dupeSet.Sort(e => )
+            // }
 
             long dupesFound = 0;
             foreach(var dupeSet in dupeSets)

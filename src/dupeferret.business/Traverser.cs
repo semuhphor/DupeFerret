@@ -149,9 +149,9 @@ namespace dupeferret.business
             if (!UniqueFiles.ContainsKey(fullyQualifiedFileName))
             {
                 var fileEntry = new FileEntry(baseDirectoryEntry.Number, fullyQualifiedFileName);
-                FileInfo info = fileEntry.Info;
+                FileInfoHandler info = fileEntry.Info;
                 long length = info.Length;
-                if (length > int.MaxValue || length == 0L || fileEntry.Info.Name.StartsWith("."))
+                if (length > int.MaxValue || length == 0L || info.Name.StartsWith("."))
                 {
                     return;
                 }
