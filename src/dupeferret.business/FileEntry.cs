@@ -1,28 +1,14 @@
+using System.Xml.Serialization;
+using System.Runtime.CompilerServices;
 using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace dupeferret.business {
-    public class FileInfoHandler
-    {
-        private FileInfo _fileInfo;
+namespace dupeferret.business
+{
 
-        public long Length { get; private set; }
-        public string Name { get; private set; }
-        public DateTime CreationTime { get; private set; }
-        public DateTime LastWriteTime { get; private set; }
-        public FileInfoHandler(string fqfn)
-        {
-            _fileInfo = new FileInfo(fqfn);
-            Length = _fileInfo.Length;
-            Name = _fileInfo.Name;
-            CreationTime = _fileInfo.CreationTime;
-            LastWriteTime = _fileInfo.LastWriteTime;
-        }
-    }
-
-    public class FileEntry {
+    public class FileEntry : IComparable {
 
         public enum HashType { HashFirst512, HasFullFile }
         public int BaseDirectoryKey { get; private set; }
@@ -32,11 +18,14 @@ namespace dupeferret.business {
         public string First512Hash{ get; set;}
         public string FullFileHash{ get; set; }
 
-        public FileEntry(int baseDirectoryKey, string fqfn) {
+        public FileEntry(int baseDirectoryKey, string fqfn, FileInfoHandler handler)
+        {
             this.BaseDirectoryKey = baseDirectoryKey;
             this.FQFN = fqfn;
-            this.Info = new FileInfoHandler(fqfn); 
+            this.Info = handler;
         }
+        public FileEntry(int baseDirectoryKey, string fqfn) : this(baseDirectoryKey, fqfn, new FileInfoHandler(fqfn)) {}
+        
 
         public string FirstHash()
         {
@@ -82,6 +71,33 @@ namespace dupeferret.business {
 
             // Return the hexadecimal string.
             return sBuilder.ToString();
+        }
+
+        // IComparabale
+        public int CompareTo(object other)
+        {
+            if (other == null)                                  // q. other null?
+                return 1;                                       // a. yes ... this comes afer null.
+
+            if (this == other)                                  // q. comparing to self?
+                return 0;                                       // a. yes .. they are the same.
+
+            FileEntry otherEntry = other as FileEntry;                  
+
+            if (otherEntry == null)                                         // q. other a filentry?
+                throw new ArgumentException("Object is not a FileEntry");   // a. no .. can't compare it.
+
+            int rc = this.Info.CreationTime.CompareTo(otherEntry.Info.CreationTime);
+            
+            if (rc != 0)
+                return rc;
+            
+            rc = this.Info.LastWriteTime.CompareTo(otherEntry.Info.LastWriteTime);
+
+            if (rc != 0)
+                return rc;
+            
+            return this.FQFN.CompareTo(otherEntry.FQFN);
         }
     }
 }
