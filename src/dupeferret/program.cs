@@ -11,6 +11,8 @@ namespace dupeferret
 
         static void Main(string[] args)
         {
+            _traverser.RaiseFoundDirectoryEvent += ShowEvent;
+            _traverser.RaiseDupeFoundEvent += ShowEvent;
             foreach(var arg in args)
             {
                 _traverser.AddBaseDirectory(arg);
@@ -28,6 +30,11 @@ namespace dupeferret
                 dupesFound += (dupeSet.Count - 1);
             }
             Console.WriteLine("{0} files checked. {1} dupes found", _traverser.UniqueFiles.Count, dupesFound);
+        }
+
+        private static void ShowEvent(object sender, EventMessageArgs e)
+        {
+            Console.Error.WriteLine(e.Message);
         }
     }
 }

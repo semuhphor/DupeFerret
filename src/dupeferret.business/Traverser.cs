@@ -13,6 +13,8 @@ namespace dupeferret.business
         private readonly Dictionary<string, FileEntry> _uniqueFiles = new Dictionary<string, FileEntry>();
         private readonly Dictionary<long, List<FileEntry>> _filesByLength = new Dictionary<long, List<FileEntry>>();
 
+        public event EventHandler<EventMessageArgs> RaiseFoundDirectoryEvent;
+        public event EventHandler<EventMessageArgs> RaiseDupeFoundEvent;
         public Dictionary<string, FileEntry> UniqueFiles => _uniqueFiles;
 
         public Dictionary<long, List<FileEntry>> FilesByLength => _filesByLength;
@@ -20,6 +22,7 @@ namespace dupeferret.business
         public Dictionary<int, BaseDirectoryEntry> BaseDirectories => _baseDirectories;
 
         public enum HashType{ Small, Full }
+
         public void AddBaseDirectory(string directory)
         {
             if (!DirectoryExists(directory))
@@ -61,7 +64,7 @@ namespace dupeferret.business
             foreach(var baseDirectoryEntry in _baseDirectories.Values)
             {
                 string dir = baseDirectoryEntry.Directory;
-                Console.WriteLine("Processing {0}", dir);
+                OnRaiseFoundDirectoryEvent(new EventMessageArgs(dir));
                 try
                 {
                     var dirInfo = new DirectoryInfo(dir);
@@ -111,6 +114,10 @@ namespace dupeferret.business
                         dupeSets.Add(hash, new List<FileEntry>());
                     }
                     dupeSets[hash].Add(entry);
+                    if (hashType == HashType.Full)
+                    {
+                        OnDupeFoundEvent(new EventMessageArgs(entry.FQFN));
+                    }
                 }
                 catch {}
             }
@@ -137,6 +144,7 @@ namespace dupeferret.business
             {
                 foreach(var dir in dirInfo.GetDirectories("*", SearchOption.TopDirectoryOnly))
                 {
+                    OnRaiseFoundDirectoryEvent(new EventMessageArgs(dir.FullName));
                     BuildFileList(dir, fileList);
                 }
             }
@@ -187,6 +195,26 @@ namespace dupeferret.business
                 }
             }
             return false;
+        }
+
+        protected virtual void OnRaiseFoundDirectoryEvent(EventMessageArgs e)
+        {
+            EventHandler<EventMessageArgs> raiseEvent = RaiseFoundDirectoryEvent;
+
+            if (raiseEvent != null)
+            {
+                raiseEvent(this, e);
+            }
+        }
+        protected virtual void OnDupeFoundEvent(EventMessageArgs e)
+        {
+            EventHandler<EventMessageArgs> raiseEvent = RaiseDupeFoundEvent;
+
+            if (raiseEvent != null)
+            {
+                e.Message = $"DupeFound: {e.Message}";
+                raiseEvent(this, e);
+            }
         }
     }
 }
