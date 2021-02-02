@@ -24,6 +24,8 @@ Things to do:
     * Extract date from EXIF data or use file modified date?
 * UI to show files (Icons?) 
   * What about other types, like text or excel/word/pdf?
+* JSON
+  * Output JSON and let something else figger out the delete commands (maybe python)
 
 # Project Title
 
