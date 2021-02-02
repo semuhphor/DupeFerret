@@ -22,7 +22,22 @@ namespace dupeferret.business
         public Dictionary<int, BaseDirectoryEntry> BaseDirectories => _baseDirectories;
 
         public enum HashType{ Small, Full }
+        public class JsonFriendlyDupes
+        {
+            public string Duplicates { get {return "DupeSets"; } }
+            public List<List<SimpleFileEntry>> Dupes = new List<List<SimpleFileEntry>>();
 
+            public JsonFriendlyDupes(List<List<FileEntry>> Dupeset){
+                foreach(var list in Dupeset){
+                    var seList = new List<SimpleFileEntry>();
+                    Dupes.Add(seList);
+
+                    foreach(var entry in list){
+                        seList.Add(entry.ToSimpleFileEntry());
+                    }
+                }
+            } 
+        }
         public void AddBaseDirectory(string directory)
         {
             if (!DirectoryExists(directory))
@@ -43,8 +58,12 @@ namespace dupeferret.business
             var sameLengthList = GetAllFiles();
             var sameSmallHashList = GetDupesByHash(sameLengthList, HashType.Small);
             var sameFullHashList = GetDupesByHash(sameSmallHashList, HashType.Full);
-
             return sameFullHashList;
+        }
+
+        public JsonFriendlyDupes GetJsonFriendlyDupeSets()
+        {
+            return new JsonFriendlyDupes(GetDupeSets());
         }
 
         public List<List<FileEntry>> GetDupesByHash(List<List<FileEntry>> similarFiles, HashType hashType)

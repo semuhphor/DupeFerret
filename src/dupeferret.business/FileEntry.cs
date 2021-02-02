@@ -7,7 +7,6 @@ using System.Text;
 
 namespace dupeferret.business
 {
-
     public class FileEntry : IComparable {
 
         public enum HashType { HashFirst512, HasFullFile }
@@ -71,6 +70,10 @@ namespace dupeferret.business
 
             // Return the hexadecimal string.
             return sBuilder.ToString();
+        }
+
+        public SimpleFileEntry ToSimpleFileEntry(){
+            return new SimpleFileEntry(this);
         }
 
         // IComparabale

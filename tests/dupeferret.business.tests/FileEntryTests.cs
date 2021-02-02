@@ -27,6 +27,18 @@ namespace dupeferret.business.tests
         } 
 
         [Fact]
+        public void SimpleFileEntryhTest()
+        {
+            FileEntry fileEntry = new FileEntry(1, base.FQTestFileName);
+            var simpleEntry = fileEntry.ToSimpleFileEntry();
+            Assert.Equal(fileEntry.Info.Name, simpleEntry.Name);
+            Assert.Equal(fileEntry.FQFN, simpleEntry.FQFN);
+            Assert.Equal(fileEntry.Info.Length, simpleEntry.Length);
+            Assert.Equal(fileEntry.Info.CreationTime, simpleEntry.CreationTime);
+            Assert.Equal(fileEntry.Info.LastWriteTime, simpleEntry.LastWriteTime);
+        } 
+
+        [Fact]
         public void DupeFirstHashMatches()
         {
             var hash = new FileEntry(1, base.FQTestFileName).FirstHash();

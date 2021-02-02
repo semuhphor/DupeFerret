@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using dupeferret.business;
+using System.Text.Json;
 
 namespace dupeferret
 {
@@ -17,15 +18,17 @@ namespace dupeferret
             {
                 _traverser.AddBaseDirectory(arg);
             }
-            var dupeSets = _traverser.GetDupeSets();
+            var dupeSets = _traverser.GetJsonFriendlyDupeSets();
 
             // foreach(var dupeSet in dupeSets)
             // {
             //     dupeSet.Sort(e => )
             // }
 
+            Console.WriteLine(JsonSerializer.Serialize(dupeSets.Dupes));
+
             long dupesFound = 0;
-            foreach(var dupeSet in dupeSets)
+            foreach(var dupeSet in dupeSets.Dupes)
             {
                 dupesFound += (dupeSet.Count - 1);
             }
@@ -34,7 +37,7 @@ namespace dupeferret
 
         private static void ShowEvent(object sender, EventMessageArgs e)
         {
-            Console.Error.WriteLine(e.Message);
+            // Console.Error.WriteLine(e.Message);
         }
     }
 }
