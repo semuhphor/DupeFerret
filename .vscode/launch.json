@@ -4,6 +4,17 @@
    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
    "version": "0.2.0",
    "configurations": [
+       {
+           "name": ".NET Core Launch (console on test data)",
+           "type": "coreclr",
+           "request": "launch",
+           "preLaunchTask": "build",
+           "program": "${workspaceFolder}/src/dupeferret/bin/Debug/netcoreapp3.1/dupeferret.dll",
+           "args": ["."],
+           "cwd": "${workspaceFolder}/tests/dupeferret.business.tests/TestData",
+           "stopAtEntry": true,
+           "console": "internalConsole"
+       },
         {
             "name": ".NET Core Launch (console)",
             "type": "coreclr",
