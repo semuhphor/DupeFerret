@@ -59,8 +59,8 @@ namespace dupeferret.business.tests
         {
             _traverser.AddBaseDirectory(TestDataDirectory);
             _traverser.GetAllFiles();
-            Assert.Equal(12, _traverser.UniqueFiles.Count);
-            Assert.Equal(8, CountFiles("dup"));
+            Assert.Equal(14, _traverser.UniqueFiles.Count);
+            Assert.Equal(10, CountFiles("dup"));
             Assert.Equal(4, CountFiles("notdup"));
         }
 
@@ -77,8 +77,8 @@ namespace dupeferret.business.tests
         {
             _traverser.AddBaseDirectory(TestDiretorySet1);
             _traverser.GetAllFiles();
-            Assert.Equal(9, _traverser.Count);
-            Assert.Equal(6, CountFiles("dup"));
+            Assert.Equal(10, _traverser.Count);
+            Assert.Equal(7, CountFiles("dup"));
             Assert.Equal(3, CountFiles("notdup"));
         }
 
@@ -87,8 +87,8 @@ namespace dupeferret.business.tests
         {
             _traverser.AddBaseDirectory(TestDiretorySet2);
             _traverser.GetAllFiles();
-            Assert.Equal(3, _traverser.Count);
-            Assert.Equal(2, CountFiles("dup"));
+            Assert.Equal(4, _traverser.Count);
+            Assert.Equal(3, CountFiles("dup"));
             Assert.Equal(1, CountFiles("notdup"));
         }
 
@@ -98,8 +98,8 @@ namespace dupeferret.business.tests
             _traverser.AddBaseDirectory(TestDiretorySet1);
             _traverser.AddBaseDirectory(TestDiretorySet2);
              _traverser.GetAllFiles();
-            Assert.Equal(12, _traverser.Count);
-            Assert.Equal(8, CountFiles("dup"));
+            Assert.Equal(14, _traverser.Count);
+            Assert.Equal(10, CountFiles("dup"));
             Assert.Equal(4, CountFiles("notdup"));
         }
 
