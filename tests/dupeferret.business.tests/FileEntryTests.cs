@@ -27,10 +27,10 @@ namespace dupeferret.business.tests
         } 
 
         [Fact]
-        public void SimpleFileEntryhTest()
+        public void ISimpleFileEntryhTest()
         {
             FileEntry fileEntry = new FileEntry(1, base.FQTestFileName);
-            var simpleEntry = fileEntry.ToSimpleFileEntry();
+            var simpleEntry = fileEntry as ISimpleFileEntry;
             Assert.Equal(fileEntry.Info.Name, simpleEntry.Name);
             Assert.Equal(fileEntry.FQFN, simpleEntry.FQFN);
             Assert.Equal(fileEntry.Info.Length, simpleEntry.Length);

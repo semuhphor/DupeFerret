@@ -7,7 +7,7 @@ using System.Text;
 
 namespace dupeferret.business
 {
-    public class FileEntry : IComparable {
+    public class FileEntry : IComparable, ISimpleFileEntry {
 
         public enum HashType { HashFirst512, HasFullFile }
         public int BaseDirectoryKey { get; private set; }
@@ -16,6 +16,16 @@ namespace dupeferret.business
 
         public string First512Hash{ get; set;}
         public string FullFileHash{ get; set; }
+
+        string ISimpleFileEntry.FQFN { get { return FQFN; }}
+
+        long ISimpleFileEntry.Length { get { return Info.Length; }}
+
+        string ISimpleFileEntry.Name { get { return Info.Name; }}
+
+        DateTime ISimpleFileEntry.CreationTime { get { return Info.CreationTime; }}
+
+        DateTime ISimpleFileEntry.LastWriteTime { get { return Info.LastWriteTime; }}
 
         public FileEntry(int baseDirectoryKey, string fqfn, FileInfoHandler handler)
         {
@@ -72,10 +82,6 @@ namespace dupeferret.business
             return sBuilder.ToString();
         }
 
-        public SimpleFileEntry ToSimpleFileEntry(){
-            return new SimpleFileEntry(this);
-        }
-
         // IComparabale
         public int CompareTo(object other)
         {
@@ -101,6 +107,11 @@ namespace dupeferret.business
                 return rc;
             
             return this.FQFN.CompareTo(otherEntry.FQFN);
+        }
+
+        int IComparable.CompareTo(object obj)
+        {
+            throw new NotImplementedException();
         }
     }
 }

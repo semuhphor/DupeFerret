@@ -25,16 +25,13 @@ namespace dupeferret.business
         public class JsonFriendlyDupes
         {
             public string Duplicates { get {return "DupeSets"; } }
-            public List<List<SimpleFileEntry>> Dupes = new List<List<SimpleFileEntry>>();
+            public List<List<ISimpleFileEntry>> Dupes = new List<List<ISimpleFileEntry>>();
 
-            public JsonFriendlyDupes(List<List<FileEntry>> Dupeset){
-                foreach(var list in Dupeset){
-                    var seList = new List<SimpleFileEntry>();
-                    Dupes.Add(seList);
-
-                    foreach(var entry in list){
-                        seList.Add(entry.ToSimpleFileEntry());
-                    }
+            public JsonFriendlyDupes(List<List<FileEntry>> Dupeset)
+            {
+                foreach(var list in Dupeset)
+                {
+                    Dupes.Add(list.Cast<ISimpleFileEntry>().ToList());
                 }
             } 
         }
