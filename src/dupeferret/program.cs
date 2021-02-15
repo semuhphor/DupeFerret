@@ -32,7 +32,7 @@ namespace dupeferret
             {
                 dupesFound += (dupeSet.Count - 1);
             }
-            Console.WriteLine("{0} files checked. {1} dupes found", _traverser.UniqueFiles.Count, dupesFound);
+            Console.Error.WriteLine("{0} files checked. {1} dupes found", _traverser.UniqueFiles.Count, dupesFound);
         }
 
         private static void ShowEvent(object sender, EventMessageArgs e)
