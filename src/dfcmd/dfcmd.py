@@ -7,9 +7,14 @@ def print_commands(dupe_list):
     keep = dupe_list[0]
     del dupe_list[0]
 
+    #dupes_location = '/raidspace/innamedia/dupes'
+    dupes_location = '/home/bflanders/dev/DupeFerret/tests/dupeferret.business.tests/TestData/dupes'
     print('# Keeping: {}'.format(keep['FQFN']))
-    for rm in dupe_list:
-        print('rm {}'.format(rm['FQFN']))
+    for entry in dupe_list:
+        file_to_move = entry['FQFN']
+        to_location = dupes= '{}{}'.format(dupes_location, os.path.dirname(os.path.abspath(file_to_move)))
+        print('mkdir -p \'{}\''.format(to_location))
+        print('mv \'{}\' \'{}/\''.format(file_to_move, to_location))
 
 
 with open('/home/bflanders/Desktop/df.json', 'r') as dupe_json_file:
