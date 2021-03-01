@@ -7,8 +7,8 @@ def print_commands(dupe_list):
     keep = dupe_list[0]
     del dupe_list[0]
 
-    #dupes_location = '/raidspace/innamedia/dupes'
-    dupes_location = '/home/bflanders/dev/DupeFerret/tests/dupeferret.business.tests/TestData/dupes'
+    dupes_location = '/raidspace/innamedia/dupes'
+    #dupes_location = '/home/bflanders/dev/DupeFerret/tests/dupeferret.business.tests/TestData/dupes'
     print('# Keeping: {}'.format(keep['FQFN']))
     for entry in dupe_list:
         file_to_move = entry['FQFN']
