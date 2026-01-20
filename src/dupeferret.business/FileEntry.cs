@@ -108,10 +108,5 @@ namespace dupeferret.business
             
             return this.FQFN.CompareTo(otherEntry.FQFN);
         }
-
-        int IComparable.CompareTo(object obj)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
