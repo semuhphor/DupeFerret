@@ -33,8 +33,7 @@ namespace dupeferret.business.tests
 
         internal string DetermineTestDataDirectory()
         {
-            var codeBaseUrl = new Uri(typeof(TraverserTests).Assembly.CodeBase);
-            var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath); 
+            var codeBasePath = typeof(TraverserTests).Assembly.Location;
             var path = Path.GetDirectoryName(codeBasePath);
             _path = path; 
             while (!path.EndsWith(Path.DirectorySeparatorChar + "bin"))

@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace dupeferret
 {
-    class program
+    class Program
     {
         static Traverser _traverser = new dupeferret.business.Traverser();
 

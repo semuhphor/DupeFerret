@@ -58,10 +58,10 @@ namespace dupeferret.business
             byte[] buffer = new byte[readLength];
             using (var fi = File.Open(FQFN, FileMode.Open,FileAccess.Read, FileShare.Read))
             {
-                fi.Read(buffer, 0, (int) readLength);
+                fi.ReadExactly(buffer, 0, (int) readLength);
                 fi.Close();
             }
-            return GetHash(new SHA512Managed(), buffer);
+            return GetHash(SHA512.Create(), buffer);
         }
 
         private static string GetHash(HashAlgorithm hashAlgorithm, byte[] data)

@@ -67,9 +67,11 @@ namespace dupeferret.business
         {
             var returnList = new List<List<FileEntry>>();
 
-            foreach(var list in similarFiles)
+            // Process hash comparisons in parallel for better performance
+            var results = similarFiles.AsParallel().Select(list => FindDupes(list, hashType)).ToList();
+            
+            foreach(var sameByHash in results)
             {
-                var sameByHash = FindDupes(list, hashType);
                 returnList.AddRange(sameByHash);
             }
             return returnList;
